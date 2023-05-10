@@ -1,9 +1,14 @@
 package com.example.animal_continent_application2;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AnimalDatabaseHelper extends SQLiteOpenHelper {
 
@@ -31,7 +36,22 @@ public class AnimalDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public ArrayList<Animal> fetchAnimals() {
+        ArrayList<Animal> animalList = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("animal", null, null, null, null, null, null);
 
+        while (cursor.moveToNext()) {
+            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
+            @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
+            @SuppressLint("Range") String continent = cursor.getString(cursor.getColumnIndex("continent"));
+            Animal animal = new Animal(id, name, continent);
+            animalList.add(animal);
+        }
+
+        cursor.close();
+        return animalList;
+    }
 
 }
 

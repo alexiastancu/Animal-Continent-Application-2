@@ -1,6 +1,8 @@
 package com.example.animal_continent_application2;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +23,13 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.ViewHolder
     public static ArrayList<Animal> animalList;
     private LayoutInflater inflater;
 
+    private AnimalDatabaseHelper dbHelper;
 
 
-    public AnimalAdapter(Context context, ArrayList<Animal> animalList) {
+    public AnimalAdapter(Context context) {
         this.context = context;
-        this.animalList = animalList;
+        dbHelper = new AnimalDatabaseHelper(context);
+        this.animalList = dbHelper.fetchAnimals();
         inflater = LayoutInflater.from(context);
     }
 
@@ -55,6 +59,11 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.ViewHolder
         return animalList.size();
     }
 
+    public ArrayList<Animal> getAnimalList()
+    {
+        return this.animalList;
+    }
+
 
     private static OnDeleteClickListener onDeleteClickListener;
 
@@ -66,14 +75,29 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.ViewHolder
         onDeleteClickListener = listener;
     }
 
-    public void removeItem(int position) {
-        animalList.remove(position);
+    public boolean removeItem(int position) {
+        Animal deletedAnimal = animalList.remove(position);
         notifyItemRemoved(position);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String selection = "id=?";
+        String[] selectionArgs = {String.valueOf(deletedAnimal.getId())};
+        int deletedRows = db.delete("animal", selection, selectionArgs);
+        return deletedRows > 0;
     }
 
-    public void addItem(Animal animal) {
+    public boolean addItem(Animal animal) {
         animalList.add(animal);
         notifyItemInserted(animalList.size() - 1);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("name", animal.getName());
+        values.put("continent", animal.getContinent());
+
+        long newRowId = db.insert("animal", null, values);
+        notifyItemInserted(animalList.size() - 1);
+        return newRowId != -1;
     }
 
 
