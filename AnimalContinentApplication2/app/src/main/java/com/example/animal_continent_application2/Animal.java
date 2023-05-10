@@ -1,5 +1,7 @@
 package com.example.animal_continent_application2;
 
+import java.util.Objects;
+
 public class Animal {
     private long id;
     private String name;
@@ -31,5 +33,23 @@ public class Animal {
     public void setId(long id) {
         this.id = id;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Animal other = (Animal) obj;
+        return Objects.equals(name, other.name) && Objects.equals(continent, other.continent);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, continent);
+    }
+
 }
 

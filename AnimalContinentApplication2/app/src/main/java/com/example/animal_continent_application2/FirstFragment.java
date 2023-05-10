@@ -21,7 +21,7 @@ import java.util.Arrays;
 public class FirstFragment extends Fragment {
     private View fragmentView;
     private RecyclerView recyclerView;
-    private AnimalAdapter adapter;
+    public static AnimalAdapter adapter;
     //private ArrayList<Animal> animalList;
 
     private AnimalDatabaseHelper dbHelper;
@@ -85,15 +85,14 @@ public class FirstFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Handle button click here
-                // Get the input values from the fields
                 EditText animalNameEditText = fragmentView.findViewById(R.id.inserted_animal_name);
                 EditText animalContinentEditText = fragmentView.findViewById(R.id.inserted_animal_continent);
 
                 String animalName = animalNameEditText.getText().toString();
                 String continentName = animalContinentEditText.getText().toString();
 
-                // Perform the verifications
+                Animal newAnimal = new Animal(1, animalName, continentName);
+
                 boolean isNameAlreadyExists = false;
                 boolean isAnyFieldEmpty = false;
                 boolean isValidContinent = false;
@@ -118,6 +117,8 @@ public class FirstFragment extends Fragment {
                     // Display error message: Animal name already exists, perform data update instead
                     Snackbar.make(view, "Animal name already exists.", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
+                    adapter.animalList.remove(newAnimal);
+                    adapter.animalList.add(newAnimal);
                 } else if (isAnyFieldEmpty) {
                     // Display error message: All fields must be filled
                     Snackbar.make(view, "All fields must be filled.", Snackbar.LENGTH_LONG)
@@ -127,10 +128,6 @@ public class FirstFragment extends Fragment {
                     Snackbar.make(view, "Invalid continent name.", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 } else {
-                    // Proceed with adding the animal to the database
-                    Animal newAnimal = new Animal(1, animalName, continentName);
-//                    dbHelper.addAnimal(newAnimal);
-                    //animalList.add(newAnimal);
                     ContentValues values = new ContentValues();
                     values.put("name", newAnimal.getName());
                     values.put("continent", newAnimal.getContinent());

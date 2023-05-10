@@ -11,16 +11,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.animal_continent_application2.Animal;
-import com.example.animal_continent_application2.R;
-
-import java.text.BreakIterator;
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
 
 
 public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.ViewHolder> {
     private Context context;
-    public static ArrayList<Animal> animalList;
+    public static Set<Animal> animalList;
     private LayoutInflater inflater;
 
     private AnimalDatabaseHelper dbHelper;
@@ -45,7 +42,7 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Get the data for the current position
-        Animal animal = animalList.get(position);
+        Animal animal = getItem(position);
 
         // Set data to views
         holder.nameTextView.setText(animal.getName());
@@ -59,13 +56,17 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.ViewHolder
         return animalList.size();
     }
 
-    public ArrayList<Animal> getAnimalList()
+    public Set<Animal> getAnimalList()
     {
         return this.animalList;
     }
 
 
     private static OnDeleteClickListener onDeleteClickListener;
+
+    public void setItems(Set<Animal> animalList) {
+        this.animalList = animalList;
+    }
 
     public interface OnDeleteClickListener {
         void onDeleteClick(int position);
@@ -75,8 +76,24 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.ViewHolder
         onDeleteClickListener = listener;
     }
 
+    private Animal getItem(int position) {
+        Iterator<Animal> iterator = animalList.iterator();
+        int currentIndex = 0;
+
+        while (iterator.hasNext()) {
+            Animal animal = iterator.next();
+            if (currentIndex == position) {
+                return animal;
+            }
+            currentIndex++;
+        }
+
+        return null; // Return null if position is out of bounds
+    }
+
     public boolean removeItem(int position) {
-        Animal deletedAnimal = animalList.remove(position);
+        Animal deletedAnimal = getItem(position);
+        animalList.remove(getItem(position));
         notifyItemRemoved(position);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String selection = "id=?";
@@ -112,14 +129,11 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.ViewHolder
             nameTextView = itemView.findViewById(R.id.animal_name);
             continentTextView = itemView.findViewById(R.id.continent_name);
             deleteButton = itemView.findViewById(R.id.delete_button);
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onDeleteClickListener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            onDeleteClickListener.onDeleteClick(position);
-                        }
+            deleteButton.setOnClickListener(v -> {
+                if (onDeleteClickListener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        onDeleteClickListener.onDeleteClick(position);
                     }
                 }
             });

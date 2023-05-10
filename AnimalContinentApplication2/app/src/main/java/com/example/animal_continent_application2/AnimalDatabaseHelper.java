@@ -8,7 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AnimalDatabaseHelper extends SQLiteOpenHelper {
 
@@ -27,6 +29,10 @@ public class AnimalDatabaseHelper extends SQLiteOpenHelper {
                 "continent TEXT" +
                 ")";
         db.execSQL(sql);
+
+        Set<Animal> animalList = fetchAnimals();
+        FirstFragment.adapter.setItems(animalList);
+        FirstFragment.adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -36,8 +42,8 @@ public class AnimalDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public ArrayList<Animal> fetchAnimals() {
-        ArrayList<Animal> animalList = new ArrayList<>();
+    public Set<Animal> fetchAnimals() {
+        Set<Animal> animalList = new HashSet<>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query("animal", null, null, null, null, null, null);
 
