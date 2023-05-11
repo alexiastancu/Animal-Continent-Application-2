@@ -11,13 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
 
 public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.ViewHolder> {
     private Context context;
-    public static Set<Animal> animalList;
+    public static ArrayList<Animal> animalList;
     private LayoutInflater inflater;
 
     private AnimalDatabaseHelper dbHelper;
@@ -56,7 +57,7 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.ViewHolder
         return animalList.size();
     }
 
-    public Set<Animal> getAnimalList()
+    public ArrayList<Animal> getAnimalList()
     {
         return this.animalList;
     }
@@ -64,7 +65,7 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.ViewHolder
 
     private static OnDeleteClickListener onDeleteClickListener;
 
-    public void setItems(Set<Animal> animalList) {
+    public void setItems(ArrayList<Animal> animalList) {
         this.animalList = animalList;
     }
 
@@ -113,7 +114,6 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.ViewHolder
         values.put("continent", animal.getContinent());
 
         long newRowId = db.insert("animal", null, values);
-        notifyItemInserted(animalList.size() - 1);
         return newRowId != -1;
     }
 

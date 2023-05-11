@@ -29,10 +29,9 @@ public class AnimalDatabaseHelper extends SQLiteOpenHelper {
                 "continent TEXT" +
                 ")";
         db.execSQL(sql);
-
-        Set<Animal> animalList = fetchAnimals();
-        FirstFragment.adapter.setItems(animalList);
-        FirstFragment.adapter.notifyDataSetChanged();
+//        Set<Animal> animalList = fetchAnimals();
+//        FirstFragment.adapter.setItems(animalList);
+//        FirstFragment.adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -42,8 +41,8 @@ public class AnimalDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public Set<Animal> fetchAnimals() {
-        Set<Animal> animalList = new HashSet<>();
+    public ArrayList<Animal> fetchAnimals() {
+        ArrayList<Animal> animalList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query("animal", null, null, null, null, null, null);
 

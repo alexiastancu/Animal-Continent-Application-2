@@ -128,10 +128,7 @@ public class FirstFragment extends Fragment {
                     Snackbar.make(view, "Invalid continent name.", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 } else {
-                    ContentValues values = new ContentValues();
-                    values.put("name", newAnimal.getName());
-                    values.put("continent", newAnimal.getContinent());
-                    long newRowId = db.insert("animal", null, values);
+
 
                     boolean isAdded = adapter.addItem(newAnimal);
 //                  adapter.notifyItemInserted(animalList.size() - 1);
