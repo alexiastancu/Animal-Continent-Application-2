@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-<!--    <item android:drawable="@color/purple_200" android:state_selected="true"/>&ndash;&gt;-->
-<!--    <item android:drawable="@color/purple_200" android:state_pressed="true"/>&ndash;&gt;-->
-<!--    <item android:drawable="@color/orange"/>-->
     <item android:drawable="@drawable/add_button_pressed" android:state_selected="true"/>-->
     <item android:drawable="@drawable/add_button_pressed" android:state_pressed="true"/>
     <item android:drawable="@drawable/add_button_normal"/>
-<!--    <item android:state_pressed="true" android:backgroundTint="@color/orange" android:textColor="@color/white"/>-->
-<!--    <item android:state_selected="true" android:backgroundTint="@color/orange" android:textColor="@color/white"/>-->
-<!--    <item android:backgroundTint="@color/purple_200" android:textColor="@color/white"/>-->
 </selector>

@@ -42,8 +42,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="389dp"
-        android:layout_height="wrap_content"
+        android:layout_width="386dp"
+        android:layout_height="595dp"
         android:layout_centerHorizontal="true"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
