@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 
-public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.ViewHolder> {
+public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.ViewHolder> implements  AnimalDatabaseHelper.OnAnimalsFetchedListener{
     private Context context;
     public static ArrayList<Animal> animalList;
     private LayoutInflater inflater;
@@ -27,10 +27,21 @@ public class AnimalAdapter extends RecyclerView.Adapter<AnimalAdapter.ViewHolder
     public AnimalAdapter(Context context) {
         this.context = context;
         dbHelper = new AnimalDatabaseHelper(context);
-        this.animalList = dbHelper.fetchAnimals();
+//        this.animalList = dbHelper.fetchAnimals();
+//        dbHelper.fetchAnimalsAsync(this);
+        animalList = new ArrayList<>();
+        fetchAnimals();
         inflater = LayoutInflater.from(context);
     }
 
+    private void fetchAnimals() {
+        dbHelper.fetchAnimalsAsync(this);
+    }
+
+    @Override
+    public void onAnimalsFetched(ArrayList<Animal> animalList) {
+        this.animalList = animalList;
+    }
 
     @NonNull
     @Override
